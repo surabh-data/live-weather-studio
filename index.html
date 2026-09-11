@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Live Weather Studio</title>
+    <meta
+      name="description"
+      content="A friendly animated weather dashboard with live city search, forecast cards, and comfort insights."
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b2239'/%3E%3Ccircle cx='24' cy='24' r='10' fill='%23ffd166'/%3E%3Cpath d='M24 42h25a9 9 0 0 0 0-18 13 13 0 0 0-25-4 11 11 0 0 0 0 22z' fill='%238bd3dd'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Live Weather Studio home">
+          <span class="brand-mark" aria-hidden="true">LW</span>
+          <span>
+            <strong>Live Weather Studio</strong>
+            <small>Open-Meteo powered</small>
+          </span>
+        </a>
+
+        <nav class="top-actions" aria-label="Weather controls">
+          <button class="ghost-button" id="locationBtn" type="button">Use My Location</button>
+          <button class="unit-toggle" id="unitToggle" type="button" aria-label="Switch temperature unit">
+            <span>C</span>
+          </button>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="weather-hero" aria-labelledby="app-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Interactive Weather Project</p>
+            <h1 id="app-title">A weather app that feels alive.</h1>
+            <p>
+              Search any city, read the current conditions, scan the next few hours, and get simple
+              comfort notes before stepping outside.
+            </p>
+
+            <form class="search-card" id="searchForm" autocomplete="off">
+              <label for="cityInput">City or place</label>
+              <div class="search-row">
+                <input id="cityInput" name="city" type="search" value="Cleveland" placeholder="Try Cleveland, Delhi, London" />
+                <button class="primary-button" type="submit">Search</button>
+              </div>
+              <p class="status-message" id="statusMessage" role="status">Ready for a city search.</p>
+            </form>
+
+            <div class="quick-row" id="recentCities" aria-label="Recent cities"></div>
+          </div>
+
+          <article class="weather-card" aria-label="Current weather">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Now</p>
+                <h2 id="cityName">Cleveland</h2>
+                <p id="localTime">Loading local weather</p>
+              </div>
+              <span class="source-pill" id="sourcePill">Live</span>
+            </div>
+
+            <div class="weather-stage" id="weatherScene" aria-hidden="true">
+              <div class="sky-glow"></div>
+              <div class="sun-core"></div>
+              <div class="moon-core"></div>
+              <div class="cloud cloud-one"></div>
+              <div class="cloud cloud-two"></div>
+              <div class="rain rain-one"></div>
+              <div class="rain rain-two"></div>
+              <div class="rain rain-three"></div>
+              <div class="snow snow-one"></div>
+              <div class="snow snow-two"></div>
+              <div class="bolt"></div>
+            </div>
+
+            <div class="current-grid">
+              <div>
+                <span class="label">Temperature</span>
+                <strong id="tempValue">--</strong>
+              </div>
+              <div>
+                <span class="label">Condition</span>
+                <strong id="conditionValue">--</strong>
+              </div>
+              <div>
+                <span class="label">Feels Like</span>
+                <strong id="feelsValue">--</strong>
+              </div>
+              <div>
+                <span class="label">High / Low</span>
+                <strong id="rangeValue">--</strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="section metric-section" aria-label="Weather metrics">
+          <article class="metric-card">
+            <span>Wind</span>
+            <strong id="windValue">--</strong>
+            <p id="windNote">Wind details will appear here.</p>
+          </article>
+          <article class="metric-card">
+            <span>Humidity</span>
+            <strong id="humidityValue">--</strong>
+            <p id="humidityNote">Humidity comfort will appear here.</p>
+          </article>
+          <article class="metric-card">
+            <span>Rain Chance</span>
+            <strong id="rainValue">--</strong>
+            <p id="rainNote">Rain guidance will appear here.</p>
+          </article>
+          <article class="metric-card">
+            <span>Pressure</span>
+            <strong id="pressureValue">--</strong>
+            <p id="pressureNote">Pressure trend will appear here.</p>
+          </article>
+        </section>
+
+        <section class="section split-section">
+          <article class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Next Hours</p>
+              <h2>Temperature rhythm</h2>
+            </div>
+            <svg class="temp-chart" id="tempChart" viewBox="0 0 640 240" role="img" aria-labelledby="chartTitle chartDesc">
+              <title id="chartTitle">Hourly temperature chart</title>
+              <desc id="chartDesc">A line chart showing the next hours of temperature.</desc>
+            </svg>
+            <div class="hourly-list" id="hourlyList"></div>
+          </article>
+
+          <article class="panel comfort-panel">
+            <div class="section-heading">
+              <p class="eyebrow">Comfort Guide</p>
+              <h2 id="comfortTitle">What it feels like outside</h2>
+            </div>
+            <p id="comfortText">
+              Search for a city to get a friendly summary.
+            </p>
+            <div class="tip-list" id="tipList"></div>
+          </article>
+        </section>
+
+        <section class="section">
+          <div class="section-heading forecast-heading">
+            <div>
+              <p class="eyebrow">7-Day View</p>
+              <h2>Forecast cards</h2>
+            </div>
+            <p>Built for quick scanning on desktop or mobile.</p>
+          </div>
+          <div class="forecast-grid" id="forecastGrid"></div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Live Weather Studio by Surabh Saxena. Weather data from Open-Meteo.</p>
+        <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
